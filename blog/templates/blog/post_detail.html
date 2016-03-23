@@ -2,14 +2,25 @@
 
 {% block content %}
     <div class="post">
+
         {% if post.published_date %}
+            {% if user.is_authenticated %}
+                <a class="btn btn-default" href="{% url 'post_unpublish' post_id=post.pk %}">Скасувати</a>
+            {% endif %}
             <div class="date">
                 <p>Опубліковано: {{ post.published_date }} </p>
             </div>
+        {% else %}
             {% if user.is_authenticated %}
-                <a class="btn btn-default" href="{% url 'post_edit' post_id=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a class="btn btn-default" href="{% url 'post_publish' post_id=post.pk %}">Опублікувати</a>
             {% endif %}
         {% endif %}
+
+        {% if user.is_authenticated %}
+            <a class="btn btn-default" href="{% url 'post_edit' post_id=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="btn btn-default" href="{% url 'post_remove' post_id=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+        {% endif %}
+
         <h1>{{ post.title }}</h1>
         <p>{{ post.text|linebreaks }}</p>
     </div>
